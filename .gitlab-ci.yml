@@ -1,0 +1,30 @@
+image: node
+
+cache:
+  paths:
+    - node_modules/
+stages:
+  - install
+  - test
+  - build
+
+install-job:
+  stage: install
+  script:
+    - npm install
+
+test-job:
+  stage: test
+  allow_failure: true
+  script:
+    - npm ci
+    - npx eslint --format gitlab .
+  artifacts:
+    reports:
+      codequality: gl-codequality.json
+
+build-job:
+  stage: build
+  allow_failure: true
+  script:
+    - npm run build
